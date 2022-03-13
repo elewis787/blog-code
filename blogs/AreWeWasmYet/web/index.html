@@ -39,7 +39,8 @@
         }
         async function updatecount() {
             try {
-                console.log(await client.Count())
+                let count = await client.Count();
+                document.getElementById("count").innerHTML = count;
             } catch (err) {
                 console.error('Caught exception', err)
             }
