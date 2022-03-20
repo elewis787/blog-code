@@ -2,14 +2,14 @@ package main
 
 import (
 	"crypto/sha256"
-	"fmt"
+	"encoding/hex"
 	"syscall/js"
 )
 
 func sha256Hash(this js.Value, args []js.Value) interface{} {
 	h := sha256.New()
-	h.Write([]byte(args[0].JSValue().String()))
-	return fmt.Sprintf("%x", h.Sum(nil))
+	h.Write([]byte(args[0].String()))
+	return hex.EncodeToString(h.Sum(nil))
 }
 
 func main() {
