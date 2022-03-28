@@ -17,7 +17,7 @@ func New() *CounterClient {
 	}
 }
 
-func (c *CounterClient) IncermentCounter() error {
+func (c *CounterClient) IncrementCounter() error {
 	req, err := http.NewRequest("put", "http://localhost:8080/add", nil)
 	if err != nil {
 		return err

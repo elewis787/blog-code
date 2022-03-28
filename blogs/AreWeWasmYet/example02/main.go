@@ -10,7 +10,7 @@ import (
 func main() {
 	server := &server.Server{}
 	mux := http.NewServeMux()
-	mux.HandleFunc("/add", server.HandleAddtoCount)
+	mux.HandleFunc("/add", server.HandleIncrementCount)
 	mux.HandleFunc("/count", server.HandleGetCount)
 	log.Fatal(http.ListenAndServe(":8080", mux))
 }

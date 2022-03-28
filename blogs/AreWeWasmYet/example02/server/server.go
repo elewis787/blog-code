@@ -10,7 +10,7 @@ type Server struct {
 	counter int
 }
 
-func (s *Server) HandleAddtoCount(w http.ResponseWriter, r *http.Request) {
+func (s *Server) HandleIncrementCount(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Methods", "PUT")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 

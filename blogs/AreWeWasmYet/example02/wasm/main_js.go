@@ -10,16 +10,27 @@ type jsWrapperCounterClient struct {
 	c *client.CounterClient
 }
 
-func (j *jsWrapperCounterClient) incermentCounter() js.Func {
+func (j *jsWrapperCounterClient) IncrementCounter() js.Func {
 	return js.FuncOf(func(this js.Value, args []js.Value) interface{} {
-		go func() {
-			j.c.IncermentCounter()
-		}()
-		return ""
+		handler := js.FuncOf(func(this js.Value, args []js.Value) interface{} {
+			resolve := args[0]
+			reject := args[1]
+			go func() {
+				if err := j.c.IncrementCounter(); err != nil {
+					errorConstructor := js.Global().Get("Error")
+					errorObject := errorConstructor.New(err.Error())
+					reject.Invoke(errorObject)
+				}
+				resolve.Invoke("")
+			}()
+			return nil
+		})
+		promise := js.Global().Get("Promise")
+		return promise.New(handler)
 	})
 }
 
-func (j *jsWrapperCounterClient) count() js.Func {
+func (j *jsWrapperCounterClient) Count() js.Func {
 	return js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 		handler := js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 			resolve := args[0]
@@ -45,8 +56,8 @@ func newCounter(this js.Value, args []js.Value) interface{} {
 		c: client.New(),
 	}
 	return js.ValueOf(map[string]interface{}{
-		"IncermentCounter": jsWrapper.incermentCounter(),
-		"Count":            jsWrapper.count(),
+		"IncrementCounter": jsWrapper.IncrementCounter(),
+		"Count":            jsWrapper.Count(),
 	})
 }
 

@@ -24,21 +24,33 @@
 </head>
 
 <body>
-    <button style="font-size:100px"  onclick="pressed()"><i class="fa fa-thumbs-up"></i></button>
+    <button id="button" style="font-size:100px" onclick="pressed()">
+        <i class="fa fa-thumbs-up"></i>
+    </button>
     <p style="font-size:20px" id="count"></p>
     <script>
         var client;
         function init() {
             client = NewCounter();
         }
+
         function pressed() {
-            var v = client.IncermentCounter();
-            if (v != "") {
-                console.log(v);
-            }
-            updatecount();
+            document.getElementById("button").onclick = async () => {
+                try {
+                    let v = await client.IncrementCounter();
+                    if (v != "") {
+                        console.log(v);
+                    }
+                    updatecount();
+                } catch (err) {
+                    console.error('Caught exception', err)
+                }
+            };
+
         }
+
         async function updatecount() {
+            console.log("called")
             try {
                 let count = await client.Count();
                 document.getElementById("count").innerHTML = "count: " + count;
@@ -47,8 +59,5 @@
             }
         }
     </script>
-    
-
 </body>
-
 </html>
